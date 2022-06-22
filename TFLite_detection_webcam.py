@@ -14,7 +14,6 @@
 # I added my own method of drawing boxes and labels using OpenCV.
 
 # Import packages
-from tables import ObjectAtom
 from gpiozero import LED
 import os
 import argparse
@@ -210,9 +209,9 @@ while True:
 
     # Loop over all detections and draw detection box if confidence is above minimum threshold
     for i in range(len(scores)):
-        is_empty = False
         if ((scores[i] > min_conf_threshold) and (scores[i] <= 1.0)):
-
+            #something is detected 
+            is_empty = False
             # Get bounding box coordinates and draw box
             # Interpreter can return coordinates that are outside of image dimensions, need to force them to be within image using max() and min()
             ymin = int(max(1,(boxes[i][0] * imH)))
@@ -242,8 +241,9 @@ while True:
 
     if is_empty:
         empty_count+=1
-    motor_control.on()
-    if empty_count >= 3000:
+    else:
+        motor_control.on()
+    if empty_count >= 10:
         motor_control.off()
         empty_count = 0
 
