@@ -27,6 +27,7 @@ import importlib.util
 
 #define LED pins
 led = LED(17)
+motor_control = LED(27)
 
 # Define VideoStream class to handle streaming of video from webcam in separate processing thread
 # Source - Adrian Rosebrock, PyImageSearch: https://www.pyimagesearch.com/2015/12/28/increasing-raspberry-pi-fps-with-python-and-opencv/
@@ -172,6 +173,9 @@ freq = cv2.getTickFrequency()
 videostream = VideoStream(resolution=(imW,imH),framerate=30).start()
 time.sleep(1)
 
+#Initialize failure tolerance
+empty_count = 0
+
 #for frame1 in camera.capture_continuous(rawCapture, format="bgr",use_video_port=True):
 while True:
 
@@ -199,9 +203,14 @@ while True:
     boxes = interpreter.get_tensor(output_details[boxes_idx]['index'])[0] # Bounding box coordinates of detected objects
     classes = interpreter.get_tensor(output_details[classes_idx]['index'])[0] # Class index of detected objects
     scores = interpreter.get_tensor(output_details[scores_idx]['index'])[0] # Confidence of detected objects
+    
+    # Add flags for GPIO control
     compostable_detected = False
+    is_empty = True 
+
     # Loop over all detections and draw detection box if confidence is above minimum threshold
     for i in range(len(scores)):
+        is_empty = False
         if ((scores[i] > min_conf_threshold) and (scores[i] <= 1.0)):
 
             # Get bounding box coordinates and draw box
@@ -215,8 +224,10 @@ while True:
 
             # Draw label
             object_name = labels[int(classes[i])] # Look up object name from "labels" array using class index
+            # Update compostable flag
             if object_name == 'person':
                 compostable_detected = True
+            
             label = '%s: %d%%' % (object_name, int(scores[i]*100)) # Example: 'person: 72%'
             labelSize, baseLine = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2) # Get font size
             label_ymin = max(ymin, labelSize[1] + 10) # Make sure not to draw label too close to top of window
@@ -228,6 +239,14 @@ while True:
         led.on()
     else:
         led.off()
+
+    if is_empty:
+        empty_count+=1
+    motor_control.on()
+    if empty_count >= 3000:
+        motor_control.off()
+        empty_count = 0
+
     #reset Compostable
     compostable_detected = False
 
