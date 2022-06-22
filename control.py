@@ -1,12 +1,12 @@
-from pyfirmata import Arduino, util
+from gpiozero import Button, LED, PWMLED
 from time import sleep
 
-board = Arduino('/dev/ttyACM0')
+led = LED(17)
 
 while True:
-    board.digital[12].write(1)
+    led.on()
     sleep(0.8)
-    board.digital[12].write(0)
+    led.off()
     sleep(0.8)
 
 
