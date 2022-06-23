@@ -243,7 +243,7 @@ while True:
         empty_count+=1
     else:
         motor_control.on()
-    if empty_count >= 12:
+    if empty_count >= 14:
         motor_control.off()
         empty_count = 0
 
