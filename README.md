@@ -1,3 +1,3 @@
 # Testing Adruino Control with Raspberry Pi
 
-- The webcam model detection code is take from [here](https://github.com/EdjeElectronics/TensorFlow-Lite-Object-Detection-on-Android-and-Raspberry-Pi.git).
+- The model was trained using [Lobe](https://www.lobe.ai/) with [this](https://www.kaggle.com/datasets/sapal6/waste-classification-data-v2) dataset.
