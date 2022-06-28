@@ -22,18 +22,18 @@ class Img_detect:
     def control(self, label):
         print(label)
         if label == 'N' or label == 'R' or label == 'O':
-            self.motor_control.on()
             self.empty_count = 0
             if label != 'O':
                 self.non_compostable_count+=1
                 self.led.on() #non compostable detected
             else:
+                self.motor_control.on()
                 self.led.off()
                 self.non_compostable_count = 0
         else:
             self.empty_count+=1
         if self.empty_count > 5 or self.non_compostable_count > 2:
-            self.non_compostable_count = 0 #reset since user cleared the chamber
+            self.non_compostable_count = 3 #cap the counter to prevent overflow 
             self.empty_count = 6 #cap the empty count to prevent overflow 
             self.motor_control.off()
 
