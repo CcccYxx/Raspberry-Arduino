@@ -19,7 +19,11 @@ class Img_detect:
         cv2.imwrite('./img.jpg', image)
         cam.release()
 
-    def control(self, label):
+    def control(self, label, cap = 3):
+        '''
+        Motor will stop after consequtive non compostable indicated by `cap`
+        LED will light up indicating non compostable materials entered 
+        '''
         print(label)
         if label == 'N' or label == 'R' or label == 'O':
             self.empty_count = 0
@@ -32,9 +36,9 @@ class Img_detect:
                 self.non_compostable_count = 0
         else:
             self.empty_count+=1
-        if self.empty_count > 5 or self.non_compostable_count > 2:
-            self.non_compostable_count = 3 #cap the counter to prevent overflow 
-            self.empty_count = 6 #cap the empty count to prevent overflow 
+        if self.empty_count > cap or self.non_compostable_count > cap:
+            self.non_compostable_count = cap+1 #cap the counter to prevent overflow 
+            self.empty_count = cap+1 #cap the empty count to prevent overflow 
             self.motor_control.off()
 
     def run(self):
