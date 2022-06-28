@@ -3,10 +3,9 @@ import cv2
 from gpiozero import LED
 from lobe import ImageModel
 
-model = ImageModel.load('./waste_classifier')
-
 class Img_detect:
     def __init__(self, led_pin = 17, motor_c_pin = 27):
+        self.model = ImageModel.load('./waste_classifier')
         self.led = LED(led_pin)
         self.motor_control = LED(motor_c_pin)
         self.empty_count = 0
