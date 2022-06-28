@@ -19,7 +19,7 @@ class Img_detect:
         cv2.imwrite('./img.jpg', image)
         cam.release()
 
-    def control(self, label, cap = 3):
+    def control(self, label, cap = 2):
         '''
         Motor will stop after consequtive non compostable indicated by `cap`
         LED will light up indicating non compostable materials entered 
