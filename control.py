@@ -1,12 +1,15 @@
-from gpiozero import Button, LED, PWMLED
-from time import sleep
+import cv2
 
-led = LED(17)
+cam = cv2.VideoCapture(0)
 
 while True:
-    led.on()
-    sleep(0.8)
-    led.off()
-    sleep(0.8)
+	ret, image = cam.read()
+	cv2.imshow('Imagetest',image)
+	k = cv2.waitKey(1)
+	if k != -1:
+		break
+cv2.imwrite('./testimg.jpg', image)
+cam.release()
+cv2.destroyAllWindows()
 
 
