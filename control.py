@@ -15,6 +15,13 @@ class Img_detect:
     def take_photo(self):
         cam = cv2.VideoCapture(0)
         ret, image = cam.read()
+        # Preprocessing 
+        if type(image)!= 'none':
+            image = image[120:290, 290:400]
+            for line in image:
+                for pixel in line:
+                    if pixel[1] > 105 and pixel [0] < 110 and pixel[2] < 110:
+                        pixel[1] = 255
         cv2.imshow('Imagetest',image)
         cv2.imwrite('./img.jpg', image)
         cam.release()
@@ -42,10 +49,15 @@ class Img_detect:
             self.motor_control.off()
 
     def run(self):
+        # Wait for initial setup
+        for i in range(5):
+            self.motor_control.on()
+            sleep(1)
+        # Main control loop
         while True:
             self.take_photo()
             result = self.model.predict_from_file('./img.jpg')
-            self.control(result.prediction)
+            self.control(result.prediction, 1)
             sleep(1)
 
 def main():
