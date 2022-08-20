@@ -10,7 +10,7 @@ All code is tested using a Raspberry Pi 3 (1GB RAM) with Raspberry Pi OS (32-bit
 `chmod 777 ./get_pi_req.sh`\
 `./get_pi_req.sh`
 3. Run the python script:(make sure a USB webcam is connected, and the GPIO pin connection is as specified in `control.py`):\
-`./python3 control.py`\
+`python3 ./control.py`\
 You will see predicted label being printed out in current terminal.
 
 
